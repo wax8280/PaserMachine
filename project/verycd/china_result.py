@@ -11,14 +11,15 @@ from lib.commom import splite_list
 # 分割200份,份得越多,数据库操作越频繁,内存占用越少
 DIVIDE = 200
 
-name = 'verycd'
+name = 'verycd_china'
 raw_data_path = 'china_result'
-path = [os.path.join(i[0], j) for i in os.walk(os.path.join(os.path.join(RAW_DATE_ROOT_PATH, name), raw_data_path))
-        for j in i[2]]
+path = [os.path.join(i[0], j) for i in
+        os.walk(os.path.join(os.path.join(RAW_DATE_ROOT_PATH, name), raw_data_path)) for j in i[2]]
+splite_path_list = splite_list(path, DIVIDE)
 
 
 def _connect_db():
-    return sqlite3.connect(os.path.join(PERSISTENCE_DB_ROOT_PATH, Paser.name + '.db'))
+    return sqlite3.connect(os.path.join(PERSISTENCE_DB_ROOT_PATH, name + '.db'))
 
 
 def build_db():
@@ -102,6 +103,4 @@ def parse(file_path):
 
 def run():
     pool = Pool()
-    path = Paser.path
-    splite_path_list = splite_list(path, DIVIDE)
     pool.map(parse, splite_path_list)
